@@ -357,5 +357,5 @@ func main() {
 	/* type Mammal struct {
 		Name string 'required max: "100"'
 		Origin string
-	} */
+	} . */
 }
