@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 )
 
 func main() {
@@ -288,7 +289,7 @@ func main() {
 	fmt.Println()
 
 
-	// structs: are value types, not reference types; we cannot publish field names, i.e. packages will only be able to see the struct, but not its field names
+	// structs: are value types, not reference types;
 	type Colleague struct {
 		number int
 		name string
@@ -354,8 +355,50 @@ func main() {
 	fmt.Println()
 
 	// tags in structs: we can set tags for fields; we need to import Go reflection package for it ("reflect")
-	/* type Mammal struct {
-		Name string 'required max: "100"'
+	type Mammal struct {
+		Name string `required max: "100"`
 		Origin string
-	} . */
+	}
+	tagExample := reflect.TypeOf(Mammal{})
+	field, _ := tagExample.FieldByName("Name")
+	fmt.Println(field.Tag) //print the tag
+	fmt.Println()
+
+	//if conditions
+	if pop, ok := statePopulations["FL"]; ok {
+		fmt.Println(pop)
+	} // pop is only defined and exists within the scope of the if statement
+	fmt.Println()
+
+	numbertoguess := 57
+	guess := 39
+	if guess < numbertoguess {
+		fmt.Println("Too low")
+	}
+	if guess > numbertoguess {
+		fmt.Println("Too high")
+	}
+	if guess == numbertoguess {
+		fmt.Println("Spot on")
+	}
+	fmt.Println(numbertoguess <= guess, numbertoguess >= guess, numbertoguess != guess) // also checking smaller or equal to, greater or equal to, and not equal to
+
+	// logical tests for checks
+	numbertoguess1 := 12
+	guess1 := 45
+	if guess1 < 1 || guess1 > 100 {
+		fmt.Println("Your guess must be between 1 and 100.")
+	} // an OR check for out-of-range guess values
+	if guess1 >= 1 && guess1 <= 100 {
+		if guess1 < numbertoguess1 {
+		fmt.Println("Too low")
+		}
+		if guess1 > numbertoguess1 {
+		fmt.Println("Too high")
+		}
+		if guess1 == numbertoguess1 {
+		fmt.Println("Spot on")
+		}
+	}
+
 }
