@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 )
 
@@ -66,7 +67,7 @@ func main() {
 	fmt.Println()
 
 	/* constants: are immutable, but can be shadowed; value must be calculable at compile time; same naming rules like for variables;
-	typed constants work like immutable vars, but can only interoperate with the same type; untyped constants work like literals, and can interoperate with similar types*/
+	typed constants work like immutable vars, but can only interoperate with the same type; untyped constants work like literals, and can interoperate with similar types */
 	const myConst int  = 53
 	fmt.Printf("%v, %T\n", myConst, myConst) //remember that inner constant declaration wins over package level declaration (outside of main(); package level constant shadows an inner one)
 	var number3 = 38
@@ -364,7 +365,7 @@ func main() {
 	fmt.Println(field.Tag) //print the tag
 	fmt.Println()
 
-	//if conditions
+	// if statements
 	if pop, ok := statePopulations["FL"]; ok {
 		fmt.Println(pop)
 	} // pop is only defined and exists within the scope of the if statement
@@ -382,6 +383,7 @@ func main() {
 		fmt.Println("Spot on")
 	}
 	fmt.Println(numbertoguess <= guess, numbertoguess >= guess, numbertoguess != guess) // also checking smaller or equal to, greater or equal to, and not equal to
+	fmt.Println()
 
 	// logical tests for checks
 	numbertoguess1 := 12
@@ -399,6 +401,126 @@ func main() {
 		if guess1 == numbertoguess1 {
 		fmt.Println("Spot on")
 		}
+		fmt.Println(numbertoguess1 <= guess1, numbertoguess1 == guess1, numbertoguess1 >= guess1, numbertoguess1 != guess1)
 	}
+	fmt.Println()
+
+	// logical tests where only one part runs. Either the OR or second part is executed
+	numbertoguess2 := 24
+	guess2 := 1
+	if guess2 < 1 || guess2 > 100 {
+		fmt.Println("Your guess must be between 1 and 100.")
+	} else {
+		if guess2 < numbertoguess2 {
+			fmt.Println("Too low")
+		}
+		if guess2 > numbertoguess2 {
+			fmt.Println("Too high")
+		}
+		if guess2 == numbertoguess2 {
+			fmt.Println("Spot on")
+		}
+		fmt.Println(numbertoguess2 <= guess2, numbertoguess2 == guess2, numbertoguess2 >= guess2, numbertoguess2 != guess2)
+	}
+	fmt.Println()
+
+	// comparing numbers here, we see these are the same numbers
+	myNumber := 0.1
+	if myNumber	== math.Pow(math.Sqrt(myNumber), 2) {
+		fmt.Println("These are the same")
+	} else {
+		fmt.Println("There are different")
+	}
+	fmt.Println()
+
+	// here, however, we see these are different numbers since a floating point number is an approximation of decimal value, not an exact representation
+	myNumber1 := 0.123
+	if myNumber1	== math.Pow(math.Sqrt(myNumber), 2) {
+		fmt.Println("These are the same")
+	} else {
+		fmt.Println("There are different")
+	}
+	fmt.Println()
+
+	// switch statements
+
+	// the value of a case is compared with the tag (part after the "switch" keyword) and the case is gonna execute if the value matches
+	switch 2 {
+	case 1:
+			fmt.Println("One")
+	case 2:
+			fmt.Println("Tswo")
+	default:
+			fmt.Println("Neither one or two")
+	}
+	fmt.Println()
+
+	// Go allows for multiple tests in a single case. Naturally, overlapping cases when using multiple tests in a single case are not allowed in Go. So, an syntax error pops up in a situation like "case 1, 4, 9"  and "case 2, 6, 9".
+	switch 3 {
+	case 1, 4, 9:
+		fmt.Println("One, four or nine")
+	case 2, 6, 10:
+		fmt.Println("Two, six or ten")
+	default:
+		fmt.Println("Another number")
+	}
+	fmt.Println()
+
+	// Go allows for initializers. For example, "i=3+5" initializes the value of the tag "i" that follows it.
+	switch i := 3 + 5;i {
+	case 1, 4, 9:
+		fmt.Println("One, four or nine")
+	case 2, 6, 10:
+		fmt.Println("Two, six or ten")
+	default:
+		fmt.Println("Another number")
+	}
+	fmt.Println()
+
+	/* There is also a tagless syntax for switch cases. A variable declared before a switch statement.
+	In a tagless syntax, cases are allowed to overlap (10 is lte 10 and also lte 20). If they do, the first case that evaluate to true, is gonna execute.
+	The delimiter for the statemets in the case is the "case" keywords, "default" keyword or the closing brace, i.e. there can be multiple operations within a single case.
+	The "break" keyword at the end of a case is implied and doesn't have to be explicitly stated. */
+	s := 10
+	switch {
+	case s <= 10:
+		fmt.Println("Less than or equal to ten")
+	case s <= 20:
+		fmt.Println("More than or equal to twenty")
+	default:
+		fmt.Println("Greater than twenty")
+	}
+	fmt.Println()
+
+	// for falling through, Go offers the "fallthrough" keyword. So, both the first and second case will execute in the example below. An important thing is the keyword is logicless, so the second case executes even if it doesn't fit.
+	g := 10
+	switch {
+	case g <= 10:
+		fmt.Println("Less than or equal to ten")
+		fallthrough
+	case g <= 20:
+		fmt.Println("More than or equal to twenty")
+	default:
+		fmt.Println("Greater than twenty")
+	}
+	fmt.Println()
+
+	/* a good type switch example. j is a type interface that can take any type of data.
+	The "break" keyword may be used explicitly to break out earlier than a case ends. E.g. a break can be wrapped in a logical test to determine a validation error in some incoming data, in which case this data should not be saved to the db.
+	*/
+	var j interface{} = 1
+	switch j.(type)  {
+	case int:
+			fmt.Println("j is an integer")
+			break
+			fmt.Println("This prints too")
+	case float64:
+			fmt.Println("j is a float")
+	case string:
+			fmt.Println("j is a string")
+	default:
+			fmt.Println("j is another type ")
+	}
+
 
 }
